@@ -2,7 +2,13 @@ import { createClient } from "redis";
 import type { AppConfig } from "../config.js";
 
 export function createRedisClient(config: AppConfig) {
-  const client = createClient({ url: config.REDIS_URL });
+  const client = createClient({
+    url: config.REDIS_URL,
+    socket: {
+      connectTimeout: 2_000,
+      reconnectStrategy: false,
+    },
+  });
   client.on("error", (error) => {
     console.error("Redis error", error);
   });

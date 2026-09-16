@@ -11,7 +11,7 @@ const config: AppConfig = {
   WEB_ORIGIN: "http://localhost:5173",
   SHORT_BASE_URL: "http://localhost:4000",
   SUPABASE_URL: "https://example.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "test-key",
+  SUPABASE_SECRET_KEY: "test-key",
   REDIS_URL: "redis://localhost:6379",
 };
 
