@@ -9,7 +9,7 @@ import { rateLimit } from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 import { z } from "zod";
 import type { AppConfig } from "./config.js";
-import type { SupabaseAdmin } from "./lib/supabase.js";
+import type { SupabaseAdmin, SupabaseAuth } from "./lib/supabase.js";
 import type { RedisClient } from "./lib/redis.js";
 import { requireAuth } from "./middleware/auth.js";
 import { createAnalyticsRouter } from "./routes/analytics.js";
@@ -18,10 +18,16 @@ import { createLinksRouter } from "./routes/links.js";
 interface AppDependencies {
   config: AppConfig;
   supabase: SupabaseAdmin;
+  supabaseAuth: SupabaseAuth;
   redis: RedisClient;
 }
 
-export function createApp({ config, supabase, redis }: AppDependencies) {
+export function createApp({
+  config,
+  supabase,
+  supabaseAuth,
+  redis,
+}: AppDependencies) {
   const app = express();
   app.set("trust proxy", 1);
   app.use(helmet());
@@ -47,7 +53,7 @@ export function createApp({ config, supabase, redis }: AppDependencies) {
       }),
     }),
   });
-  const auth = requireAuth(supabase);
+  const auth = requireAuth(supabaseAuth);
   const linksRouter = createLinksRouter(config, supabase, redis);
 
   app.use(
@@ -119,12 +125,19 @@ export function createApp({ config, supabase, redis }: AppDependencies) {
       response.redirect(302, destination);
 
       if (linkId) {
-        void supabase.from("click_events").insert({
-          link_id: linkId,
-          referrer: request.get("referer") || null,
-          user_agent: request.get("user-agent") || null,
-          country: request.get("cf-ipcountry") || null,
-        });
+        void supabase
+          .from("click_events")
+          .insert({
+            link_id: linkId,
+            referrer: request.get("referer") || null,
+            user_agent: request.get("user-agent") || null,
+            country: request.get("cf-ipcountry") || null,
+          })
+          .then(({ error }) => {
+            if (error) {
+              console.error("Failed to record click event", error);
+            }
+          });
       }
     } catch (error) {
       next(error);

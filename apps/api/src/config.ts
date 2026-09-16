@@ -11,6 +11,7 @@ const configSchema = z.object({
   WEB_ORIGIN: z.string().url().default("http://localhost:5173"),
   SHORT_BASE_URL: z.string().url().default("http://localhost:4000"),
   SUPABASE_URL: z.string().url(),
+  SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
   SUPABASE_SECRET_KEY: z.string().min(1),
   REDIS_URL: z.string().url().default("redis://localhost:6379"),
 });

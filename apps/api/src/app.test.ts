@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createApp } from "./app.js";
 import type { AppConfig } from "./config.js";
 import type { RedisClient } from "./lib/redis.js";
-import type { SupabaseAdmin } from "./lib/supabase.js";
+import type { SupabaseAdmin, SupabaseAuth } from "./lib/supabase.js";
 
 const config: AppConfig = {
   NODE_ENV: "test",
@@ -11,6 +11,7 @@ const config: AppConfig = {
   WEB_ORIGIN: "http://localhost:5173",
   SHORT_BASE_URL: "http://localhost:4000",
   SUPABASE_URL: "https://example.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY: "test-publishable-key",
   SUPABASE_SECRET_KEY: "test-key",
   REDIS_URL: "redis://localhost:6379",
 };
@@ -18,6 +19,7 @@ const config: AppConfig = {
 const app = createApp({
   config,
   supabase: {} as SupabaseAdmin,
+  supabaseAuth: {} as SupabaseAuth,
   redis: { isOpen: false, isReady: false } as RedisClient,
 });
 

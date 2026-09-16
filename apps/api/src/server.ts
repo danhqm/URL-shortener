@@ -1,13 +1,17 @@
 import { createApp } from "./app.js";
 import { loadConfig } from "./config.js";
 import { connectRedis, createRedisClient } from "./lib/redis.js";
-import { createSupabaseAdmin } from "./lib/supabase.js";
+import {
+  createSupabaseAdmin,
+  createSupabaseAuth,
+} from "./lib/supabase.js";
 
 const config = loadConfig();
 const redis = createRedisClient(config);
 await connectRedis(redis);
 const supabase = createSupabaseAdmin(config);
-const app = createApp({ config, supabase, redis });
+const supabaseAuth = createSupabaseAuth(config);
+const app = createApp({ config, supabase, supabaseAuth, redis });
 
 const server = app.listen(config.PORT, () => {
   console.log(`API listening on http://localhost:${config.PORT}`);
