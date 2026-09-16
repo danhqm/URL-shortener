@@ -1,0 +1,19 @@
+{
+  "name": "url-shortener",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w @url-shortener/api\" \"npm run dev -w @url-shortener/web\"",
+    "build": "npm run build -w @url-shortener/api && npm run build -w @url-shortener/web",
+    "typecheck": "npm run typecheck -w @url-shortener/api && npm run typecheck -w @url-shortener/web",
+    "test": "npm run test -w @url-shortener/api",
+    "start": "npm run start -w @url-shortener/api"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "prettier": "^3.9.7"
+  }
+}
