@@ -1,6 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, type LinkSummary } from "../lib/api";
 
+const shortBaseUrl =
+  import.meta.env.VITE_SHORT_BASE_URL ?? "http://localhost:4000";
+
 export function LinksTable({ links }: { links: LinkSummary[] }) {
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -11,9 +14,7 @@ export function LinksTable({ links }: { links: LinkSummary[] }) {
   });
 
   async function copy(code: string) {
-    await navigator.clipboard.writeText(
-      `${window.location.protocol}//${window.location.host}/${code}`,
-    );
+    await navigator.clipboard.writeText(`${shortBaseUrl}/${code}`);
   }
 
   return (

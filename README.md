@@ -14,7 +14,7 @@ A learning-focused URL shortener that makes each infrastructure layer observable
 
 1. Create a Supabase project and run `supabase/migrations/20260916000000_initial_schema.sql` in its SQL editor (or apply it with the Supabase CLI).
 2. Enable email authentication in Supabase and add `http://localhost:5173` as an allowed redirect URL.
-3. Copy `.env.example` to `.env`, fill in the Supabase URL and service-role key, then copy the three `VITE_` variables into `apps/web/.env.local`.
+3. Copy `.env.example` to `.env`, fill in the Supabase URL and service-role key, then copy the four `VITE_` variables into `apps/web/.env.local`.
 4. Start Redis and the applications:
 
    ```bash
